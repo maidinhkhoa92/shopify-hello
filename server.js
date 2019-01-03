@@ -46,6 +46,7 @@ app.get('/shopify/callback', (req, res) => {
   }
 
   if (shop && hmac && code) {
+    // DONE: Validate request is from Shopify
     const map = Object.assign({}, req.query);
     delete map['signature'];
     delete map['hmac'];
@@ -70,8 +71,6 @@ app.get('/shopify/callback', (req, res) => {
       return res.status(400).send('HMAC validation failed');
     }
 
-    res.status(200).send('HMAC validated');
-
     // DONE: Exchange temporary code for a permanent access token
     const accessTokenRequestUrl = 'https://' + shop + '/admin/oauth/access_token';
     const accessTokenPayload = {
@@ -83,8 +82,7 @@ app.get('/shopify/callback', (req, res) => {
     request.post(accessTokenRequestUrl, { json: accessTokenPayload })
     .then((accessTokenResponse) => {
       const accessToken = accessTokenResponse.access_token;
-      // TODO
-      // Use access token to make API call to 'shop' endpoint
+      // DONE: Use access token to make API call to 'shop' endpoint
       const shopRequestUrl = 'https://' + shop + '/admin/shop.json';
       const shopRequestHeaders = {
         'X-Shopify-Access-Token': accessToken,
@@ -101,6 +99,7 @@ app.get('/shopify/callback', (req, res) => {
     .catch((error) => {
       res.status(error.statusCode).send(error.error.error_description);
     });
+
   } else {
     res.status(400).send('Required parameters missing');
   }
