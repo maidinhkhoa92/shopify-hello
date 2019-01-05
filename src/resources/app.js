@@ -78,7 +78,7 @@ const callback = (req, res) => {
     res.status(400).send('Required parameters missing');
   }
 }
-export = {
+module.exports = {
   install,
   callback
 }

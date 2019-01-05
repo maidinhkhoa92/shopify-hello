@@ -9,7 +9,7 @@ const { PORT } = process.env;
 // listen
 app
   .use(cookieParser())
-  .use(bodyParser.json());
+  .use(bodyParser.json())
   .use('/shopify', router)
   .listen(PORT || 3000, () => {
     console.log('Example app listening on port 3000!');
